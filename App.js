@@ -1,5 +1,6 @@
 import React,{useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
+import ICON from 'react-native-vector-icons/MaterialIcons'
 import { StyleSheet, Text, View , KeyboardAvoidingView ,TextInput ,TouchableOpacity ,Keyboard } from 'react-native';
 import Task from './components/Task';
 export default function App() {
@@ -15,11 +16,18 @@ export default function App() {
     itemsCopy.splice(index,1);
     setTaskItems(itemsCopy);
   }
+  const deleteAll=()=>{
+    let zeroItems =[];
+    setTaskItems(zeroItems);
+  }
   return (
     <View style={styles.container}>
       {/* Today,s Tasks */}
       <View style={styles.tasksWrapper}>
-        <Text style={styles.sectionTitle}>Today's Tasks</Text>
+        <View style={styles.header}>
+          <Text style={styles.sectionTitle}>Today's Tasks</Text>
+          <ICON name="delete" size={25} color="#b22222" onPress={()=>deleteAll()}/>
+        </View>
         <View style={styles.items}>
           {/*this is where the tasks will go! */}
           {
@@ -43,6 +51,7 @@ export default function App() {
           </View>
         </TouchableOpacity>
       </KeyboardAvoidingView>
+      
     </View>
   );
 }
@@ -51,6 +60,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#5f9ea0',
+  },
+  header:{
+    padding:20,
+    flexDirection:'row',
+    alignItems:'center',
+    justifyContent:'space-between'
   },
   tasksWrapper:{
     paddingTop: 50,
