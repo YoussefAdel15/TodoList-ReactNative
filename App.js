@@ -1,7 +1,7 @@
 import React,{useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import ICON from 'react-native-vector-icons/MaterialIcons'
-import { StyleSheet, Text, View , KeyboardAvoidingView ,TextInput ,TouchableOpacity ,Keyboard } from 'react-native';
+import { StyleSheet, Text, View , KeyboardAvoidingView ,TextInput ,TouchableOpacity ,Keyboard ,ScrollView } from 'react-native';
 import Task from './components/Task';
 export default function App() {
   const [task , setTask] = useState();
@@ -28,7 +28,8 @@ export default function App() {
           <Text style={styles.sectionTitle}>Today's Tasks</Text>
           <ICON name="delete" size={25} color="#b22222" onPress={()=>deleteAll()}/>
         </View>
-        <View style={styles.items}>
+        
+        <ScrollView style={styles.items}>
           {/*this is where the tasks will go! */}
           {
             taskItems.map((item, index)=>{
@@ -37,7 +38,7 @@ export default function App() {
               </TouchableOpacity>
             })
           }
-        </View>
+        </ScrollView>
       </View>
       {/* Write a task */}
       <KeyboardAvoidingView
@@ -78,7 +79,8 @@ const styles = StyleSheet.create({
 
   },
   items:{
-    marginTop:30
+    marginTop:30,
+    height:580
   },
   writeTaskWrapper:{
     position:'absolute',
