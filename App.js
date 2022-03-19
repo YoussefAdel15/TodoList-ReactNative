@@ -1,15 +1,35 @@
 import React,{useState} from 'react';
 import { StatusBar } from 'expo-status-bar';
 import ICON from 'react-native-vector-icons/MaterialIcons'
-import { StyleSheet, Text, View , KeyboardAvoidingView ,TextInput ,TouchableOpacity ,Keyboard ,ScrollView } from 'react-native';
-import Task from './components/Task';
+import { StyleSheet, Text, View , KeyboardAvoidingView ,TextInput ,TouchableOpacity ,Keyboard ,ScrollView , Alert } from 'react-native';
+import Task from './Components/Task';
 export default function App() {
+  const [text , setText] = useState('');
   const [task , setTask] = useState();
   const [taskItems,setTaskItems]=useState([]);
+  const [isEmpty , setIsEmpty] = useState();
+  const clearText=(text)=>{
+    setText(text);
+  }
+  const checkEmpty=(isEmpty)=>{
+    if(isEmpty==true){
+      setIsEmpty(true);
+    }
+    else
+    setIsEmpty(false);
+  }
   const handleAddTask=()=>{
     Keyboard.dismiss();
-    setTaskItems([...taskItems,task])
-    setTask(null);
+    if(isEmpty==false){
+      setTaskItems([...taskItems,task])
+      setTask('');
+    }
+    else{
+      Alert.alert('OOPS!','Todos must contain at least 1 character',[
+        {text:'Okay', onPress: ()=> console.log('Alert closed')}
+      ]);
+      setTask('');
+    }
   }
   const completeTask =(index)=>{
     let itemsCopy=[...taskItems];
@@ -45,8 +65,21 @@ export default function App() {
         behavior={Platform.OS === "ios"? "padding" : "height"}
         style={styles.writeTaskWrapper}
       >
-        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text => setTask(text)}/>
-        <TouchableOpacity onPress={()=>handleAddTask()}>
+        <TextInput style={styles.input} placeholder={'Write a task'} value={task} onChangeText={text =>{
+          console.log(text.length)
+          if(text.length==0){
+            checkEmpty(true);
+            setTask(null);
+          }
+          else{
+            checkEmpty(false);
+            setTask(text);
+            clearText('');
+          }
+          }} clearButtonMode="always"/>
+        <TouchableOpacity onPress={()=>{
+        handleAddTask();
+        }}>
           <View style={styles.addWrapper}>
             <Text style={styles.addText}>+</Text>
           </View>
@@ -60,7 +93,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#5f9ea0',
+    backgroundColor: '#F9F9F9',
   },
   header:{
     padding:20,
